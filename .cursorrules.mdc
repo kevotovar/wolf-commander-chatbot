@@ -1,0 +1,86 @@
+# Cursor Rules Configuration
+
+## Project Stack
+- Next.js 14
+- Tailwind CSS
+- shadcn/ui
+- AI SDK
+
+## Ignore Patterns
+- `.next`
+- `node_modules`
+- `dist`
+- `build`
+- `coverage`
+- `*.log`
+- `*.lock`
+- `.env`
+- `.env.*`
+- `*.d.ts`
+- `components.json` # shadcn/ui config
+
+## Search Configuration
+### Include
+- `app/**/*.{ts,tsx,js,jsx}`
+- `components/**/*.{ts,tsx,js,jsx}`
+- `lib/**/*.{ts,tsx,js,jsx}`
+- `hooks/**/*.{ts,tsx,js,jsx}`
+- `tests/**/*.{ts,tsx,js,jsx}`
+- `styles/**/*.{css,scss}` # Tailwind styles
+- `components/ui/**/*.{ts,tsx}` # shadcn/ui components
+
+### Exclude
+- `**/node_modules/**`
+- `**/.next/**`
+- `**/dist/**`
+- `**/build/**`
+- `**/components.json`
+
+## Format Configuration
+### Include
+- `app/**/*.{ts,tsx,js,jsx}`
+- `components/**/*.{ts,tsx,js,jsx}`
+- `lib/**/*.{ts,tsx,js,jsx}`
+- `hooks/**/*.{ts,tsx,js,jsx}`
+- `tests/**/*.{ts,tsx,js,jsx}`
+- `styles/**/*.{css,scss}`
+- `components/ui/**/*.{ts,tsx}`
+
+### Exclude
+- `**/node_modules/**`
+- `**/.next/**`
+- `**/dist/**`
+- `**/build/**`
+- `**/components.json`
+
+## Lint Configuration
+### Include
+- `app/**/*.{ts,tsx,js,jsx}`
+- `components/**/*.{ts,tsx,js,jsx}`
+- `lib/**/*.{ts,tsx,js,jsx}`
+- `hooks/**/*.{ts,tsx,js,jsx}`
+- `tests/**/*.{ts,tsx,js,jsx}`
+- `styles/**/*.{css,scss}`
+- `components/ui/**/*.{ts,tsx}`
+
+### Exclude
+- `**/node_modules/**`
+- `**/.next/**`
+- `**/dist/**`
+- `**/build/**`
+- `**/components.json`
+
+## Test Configuration
+### Include
+- `tests/**/*.{ts,tsx,js,jsx}`
+- `**/*.test.{ts,tsx,js,jsx}`
+- `**/*.spec.{ts,tsx,js,jsx}`
+- `app/**/*.test.{ts,tsx}` # Next.js page tests
+- `components/**/*.test.{ts,tsx}` # Component tests
+
+### Exclude
+- `**/node_modules/**`
+- `**/.next/**`
+- `**/dist/**`
+- `**/build/**`
+- `**/components.json` 

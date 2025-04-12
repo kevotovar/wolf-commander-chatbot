@@ -3,35 +3,26 @@ import {
   extractReasoningMiddleware,
   wrapLanguageModel,
 } from 'ai';
-import { xai } from '@ai-sdk/xai';
-import { isTestEnvironment } from '../constants';
-import {
-  artifactModel,
-  chatModel,
-  reasoningModel,
-  titleModel,
-} from './models.test';
+import { createOpenRouter } from '@openrouter/ai-sdk-provider';
+import { createPerplexity } from '@ai-sdk/perplexity';
 
-export const myProvider = isTestEnvironment
-  ? customProvider({
-      languageModels: {
-        'chat-model': chatModel,
-        'chat-model-reasoning': reasoningModel,
-        'title-model': titleModel,
-        'artifact-model': artifactModel,
-      },
-    })
-  : customProvider({
-      languageModels: {
-        'chat-model': xai('grok-2-1212'),
-        'chat-model-reasoning': wrapLanguageModel({
-          model: xai('grok-3-mini-beta'),
-          middleware: extractReasoningMiddleware({ tagName: 'think' }),
-        }),
-        'title-model': xai('grok-2-1212'),
-        'artifact-model': xai('grok-2-1212'),
-      },
-      imageModels: {
-        'small-model': xai.image('grok-2-image'),
-      },
-    });
+const openrouter = createOpenRouter({
+  apiKey: process.env.OPENROUTER_API_KEY,
+});
+
+const perplexity = createPerplexity({
+  baseURL: 'https://openrouter.ai/api/v1',
+  apiKey: process.env.OPENROUTER_API_KEY,
+});
+
+export const myProvider = customProvider({
+  languageModels: {
+    'chat-model': openrouter('google/gemini-2.0-flash-001'),
+    'chat-model-reasoning': wrapLanguageModel({
+      model: openrouter('google/gemini-2.5-pro-preview-03-25'),
+      middleware: extractReasoningMiddleware({ tagName: 'think' }),
+    }),
+    'search-model': perplexity('perplexity/sonar-pro'),
+    'title-model': openrouter('google/gemini-2.0-flash-lite-001'),
+  },
+});
