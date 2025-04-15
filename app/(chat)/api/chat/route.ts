@@ -19,13 +19,9 @@ import {
   getTrailingMessageId,
 } from '@/lib/utils';
 import { generateTitleFromUserMessage } from '../../actions';
-import { createDocument } from '@/lib/ai/tools/create-document';
-import { updateDocument } from '@/lib/ai/tools/update-document';
-import { requestSuggestions } from '@/lib/ai/tools/request-suggestions';
-import { getWeather } from '@/lib/ai/tools/get-weather';
 import { isProductionEnvironment } from '@/lib/constants';
 import { myProvider } from '@/lib/ai/providers';
-
+import { searchCardsTool } from '@/lib/ai/tools/search-cards';
 export const maxDuration = 60;
 
 export async function POST(request: Request) {
@@ -86,11 +82,14 @@ export async function POST(request: Request) {
           system: systemPrompt({ selectedChatModel }),
           messages,
           maxSteps: 5,
+          maxTokens: 1000,
           experimental_activeTools:
-            selectedChatModel === 'chat-model-reasoning' ? [] : [],
+            selectedChatModel === 'chat-model-reasoning' ? [] : ['searchCards'],
           experimental_transform: smoothStream({ chunking: 'word' }),
           experimental_generateMessageId: generateUUID,
-          tools: {},
+          tools: {
+            searchCards: searchCardsTool,
+          },
           onFinish: async ({ response }) => {
             if (session.user?.id) {
               try {

@@ -22,6 +22,12 @@ function PureSuggestedActions({ chatId, append }: SuggestedActionsProps) {
       label: `en commander?`,
       action: `¿Cuales son los arquetipos en commander?`,
     },
+    {
+      title: '¿Cuales son las cartas que me hacen',
+      label: 'robar cartas en color verde?',
+      action:
+        '¿Cuales son las cartas que me hacen robar cartas en color verde?',
+    },
   ];
 
   return (

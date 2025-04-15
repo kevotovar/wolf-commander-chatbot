@@ -17,12 +17,13 @@ const perplexity = createPerplexity({
 
 export const myProvider = customProvider({
   languageModels: {
-    'chat-model': openrouter('google/gemini-2.0-flash-001'),
+    'chat-model': openrouter('google/gemini-2.0-flash-lite-001'),
     'chat-model-reasoning': wrapLanguageModel({
       model: openrouter('google/gemini-2.5-pro-preview-03-25'),
       middleware: extractReasoningMiddleware({ tagName: 'think' }),
     }),
     'search-model': perplexity('perplexity/sonar-pro'),
     'title-model': openrouter('google/gemini-2.0-flash-lite-001'),
+    'search-cards-model': openrouter('google/gemini-2.0-flash-lite-001'),
   },
 });
