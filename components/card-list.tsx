@@ -54,7 +54,13 @@ export function CardList({ cards, className }: CardListProps) {
               )}
             </CardHeader>
             <CardContent className="flex-1 p-4">
-              <h3 className="font-semibold text-lg">{card.name}</h3>
+              <a
+                href={`https://www.mtgwolf.com/search?q=${encodeURIComponent(card.name)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <h3 className="font-semibold text-lg">{card.name}</h3>
+              </a>
               {card.mana_cost && (
                 <div className="mt-1">
                   <ManaCost cost={card.mana_cost} />

@@ -14,6 +14,7 @@ When to use artifacts:
 
 ## Search cards tools
 - When the user asks to search a card
+- Always use the search cards tool to search for cards
 `;
 
 export const regularPrompt =

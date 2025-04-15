@@ -18,6 +18,7 @@ import { MessageEditor } from './message-editor';
 import { MessageReasoning } from './message-reasoning';
 import type { UseChatHelpers } from '@ai-sdk/react';
 import { CardSearchResults } from './card-search-results';
+import { Skeleton } from './skeleton';
 
 const PurePreviewMessage = ({
   chatId,
@@ -156,12 +157,18 @@ const PurePreviewMessage = ({
                     <div
                       key={toolCallId}
                       className={cx({
-                        skeleton: ['getWeather', 'searchCards'].includes(
+                        'w-full': ['getWeather', 'searchCards'].includes(
                           toolName,
                         ),
                       })}
                     >
-                      {toolName === 'getWeather' ? <Weather /> : null}
+                      {toolName === 'getWeather' ? (
+                        <Skeleton className="h-[200px]">
+                          <Weather />
+                        </Skeleton>
+                      ) : toolName === 'searchCards' ? (
+                        <Skeleton className="h-[300px]" />
+                      ) : null}
                     </div>
                   );
                 }

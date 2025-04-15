@@ -27,7 +27,7 @@ export function CardSearchResults({
   if (!result || result.length === 0) {
     return (
       <div className="text-center p-8 text-muted-foreground">
-        No cards found
+        No se encontraron cartas
       </div>
     );
   }
