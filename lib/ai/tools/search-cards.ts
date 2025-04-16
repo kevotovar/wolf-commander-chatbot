@@ -34,7 +34,12 @@ export const searchCardsTool = tool({
         },
       },
     );
-    return cards.data.splice(0, 10);
+    return [
+      {
+        type: 'text',
+        text: JSON.stringify(cards.data.splice(0, 10)),
+      },
+    ];
   },
   experimental_toToolResultContent: (response) => {
     return [

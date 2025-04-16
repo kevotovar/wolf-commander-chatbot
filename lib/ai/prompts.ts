@@ -20,6 +20,14 @@ When to use artifacts:
 export const regularPrompt =
   'You are a friendly assistant! Keep your responses concise and helpful.';
 
+export const searchModelPrompt = `
+You are a friendly assistant that helps users with their questions about Magic: The Gathering.
+
+You are given a question and you need to answer it based on the information provided.
+
+always give the links for the urls you find.
+`;
+
 export const systemPrompt = ({
   selectedChatModel,
 }: {
@@ -27,6 +35,8 @@ export const systemPrompt = ({
 }) => {
   if (selectedChatModel === 'chat-model-reasoning') {
     return `${regularPrompt}\n\n${commanderPrompt}`;
+  } else if (selectedChatModel === 'search-model') {
+    return `${regularPrompt}\n\n${searchModelPrompt}`;
   } else {
     return `${regularPrompt}\n\n${artifactsPrompt}`;
   }

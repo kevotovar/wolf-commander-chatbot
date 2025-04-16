@@ -78,6 +78,11 @@ export async function POST(request: Request) {
     return createDataStreamResponse({
       execute: (dataStream) => {
         const result = streamText({
+          providerOptions: {
+            perplexity: {
+              search_domain_filter: ['moxfield.com'],
+            },
+          },
           model: myProvider.languageModel(selectedChatModel),
           system: systemPrompt({ selectedChatModel }),
           messages,
