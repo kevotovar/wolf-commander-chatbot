@@ -22,6 +22,7 @@ import { generateTitleFromUserMessage } from '../../actions';
 import { isProductionEnvironment } from '@/lib/constants';
 import { myProvider } from '@/lib/ai/providers';
 import { searchCardsTool } from '@/lib/ai/tools/search-cards';
+import { searchCedhTool } from '@/lib/ai/tools/search-cedh';
 export const maxDuration = 60;
 
 export async function POST(request: Request) {
@@ -87,15 +88,19 @@ export async function POST(request: Request) {
           system: systemPrompt({ selectedChatModel }),
           messages,
           maxSteps: 5,
-          maxTokens: 1000,
+          maxTokens: 10000,
           experimental_activeTools:
-            selectedChatModel === 'chat-model-reasoning' ? [] : ['searchCards'],
+            selectedChatModel === 'chat-model-reasoning'
+              ? []
+              : ['searchCards', 'searchCedh'],
           experimental_transform: smoothStream({ chunking: 'word' }),
           experimental_generateMessageId: generateUUID,
           tools: {
             searchCards: searchCardsTool,
+            searchCedh: searchCedhTool,
           },
-          onFinish: async ({ response }) => {
+          onFinish: async ({ response, toolCalls }) => {
+            console.log('toolCalls', toolCalls);
             if (session.user?.id) {
               try {
                 const assistantId = getTrailingMessageId({

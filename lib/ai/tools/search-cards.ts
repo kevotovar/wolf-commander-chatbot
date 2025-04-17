@@ -30,7 +30,6 @@ export const searchCardsTool = tool({
       {
         params: {
           q: text,
-          limit: 10,
         },
       },
     );

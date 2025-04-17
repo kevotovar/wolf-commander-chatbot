@@ -22,4 +22,9 @@ export const chatModels: Array<ChatModel> = [
     name: 'Modelo de búsqueda',
     description: 'Usa búsqueda avanzada',
   },
+  {
+    id: 'search-reasoning-model',
+    name: 'Modelo de optimización cedh',
+    description: 'Usa optimización cedh avanzada',
+  },
 ];

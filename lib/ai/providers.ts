@@ -23,6 +23,10 @@ export const myProvider = customProvider({
       middleware: extractReasoningMiddleware({ tagName: 'think' }),
     }),
     'search-model': perplexity('perplexity/sonar-pro'),
+    'search-reasoning-model': wrapLanguageModel({
+      model: perplexity('perplexity/sonar-reasoning-pro'),
+      middleware: extractReasoningMiddleware({ tagName: 'think' }),
+    }),
     'title-model': openrouter('google/gemini-2.0-flash-lite-001'),
     'search-cards-model': openrouter('google/gemini-2.0-flash-lite-001'),
   },
