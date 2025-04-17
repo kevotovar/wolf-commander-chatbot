@@ -1,4 +1,5 @@
 import type { ArtifactKind } from '@/components/artifact';
+import { edhBannedCards } from './bannedCards';
 
 export const mainRulesPrompt = `
 <tone>
@@ -55,7 +56,8 @@ You are an optimizer that helps users with their questions about Magic: The Gath
 
 <rules>
 Your main focus is to optimize decks based on the user's question and the decks you find.
-don't recommend cards who are banned or restricted in cedh.
+don't recommend cards who are banned or restricted in cedh ${edhBannedCards}.
+don't recommand cards who don't are on the commanders identity.
 </rules>
 `;
 
