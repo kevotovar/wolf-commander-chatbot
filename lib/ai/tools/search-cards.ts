@@ -16,6 +16,7 @@ export const searchCardsTool = tool({
     const model = myProvider.languageModel('search-cards-model');
     const prompt = `Generate a search query for the card ${query},
     following the Scryfall search syntax. ${scryfallSearchInstructions}.
+    If the user's query is only the card name (no qualifiers), generate a search query that only filters by the exact card name.
     If the user wants a color, try to be only that color.
     Return the query only, no other text, no markdown, no code block.
     write the query in english.

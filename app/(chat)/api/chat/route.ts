@@ -87,6 +87,7 @@ export async function POST(request: Request) {
           system: systemPrompt({ selectedChatModel }),
           messages,
           maxSteps: 5,
+          maxRetries: 5,
           maxTokens: 10000,
           experimental_activeTools:
             selectedChatModel === 'chat-model-reasoning'
