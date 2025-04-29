@@ -20,6 +20,7 @@ import type { UseChatHelpers } from '@ai-sdk/react';
 import { CardSearchResults } from './card-search-results';
 import { Skeleton } from './skeleton';
 import { DeckDisplay } from './deck-display';
+import { DecklistSearchResults } from './decklist-search-results';
 
 const PurePreviewMessage = ({
   chatId,
@@ -158,9 +159,12 @@ const PurePreviewMessage = ({
                     <div
                       key={toolCallId}
                       className={cx({
-                        'w-full': ['getWeather', 'searchCards', 'displayDecklist'].includes(
-                          toolName,
-                        ),
+                        'w-full': [
+                          'getWeather',
+                          'searchCards',
+                          'displayDecklist',
+                          'searchDecklist',
+                        ].includes(toolName),
                       })}
                     >
                       {toolName === 'getWeather' ? (
@@ -171,6 +175,8 @@ const PurePreviewMessage = ({
                         <Skeleton className="h-[300px]" />
                       ) : toolName === 'displayDecklist' ? (
                         <Skeleton className="h-[400px]" />
+                      ) : toolName === 'searchDecklist' ? (
+                        <Skeleton className="h-[300px]" />
                       ) : null}
                     </div>
                   );
@@ -188,6 +194,8 @@ const PurePreviewMessage = ({
                         <CardSearchResults result={resultData} />
                       ) : toolName === 'displayDecklist' ? (
                         <DeckDisplay result={resultData} />
+                      ) : toolName === 'searchDecklist' ? (
+                        <DecklistSearchResults result={resultData} />
                       ) : (
                         <pre>{JSON.stringify(result, null, 2)}</pre>
                       )}

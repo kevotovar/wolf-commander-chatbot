@@ -39,6 +39,16 @@ When to use artifacts:
 - When the user asks to search a deck
 - Always use the search cedh tool to search for decks
 
+## Search Decklist tool
+- Use the searchDecklist tool to find commander decks based on criteria like:
+  - Commander name
+  - Deck name or archetype
+  - Strategy (aggro, combo, control, etc.)
+  - Colors or color identity
+  - Budget constraints
+  - Power level targets
+- Use this tool FIRST to find relevant decks before displaying them
+
 ## Display Decklist tool
 - ALWAYS use the displayDecklist tool when discussing commander decks
 - Use this tool for EVERY interaction related to Magic: The Gathering
@@ -98,8 +108,7 @@ export const systemPrompt = ({
   } else if (selectedChatModel === 'search-reasoning-model') {
     return `${mainRulesPrompt}\n\n${searchReasoningModelPrompt}`;
   } else {
-    console.log('artifactsPrompt', artifactsPrompt);
-    return `${mainRulesPrompt}\n\n${artifactsPrompt}`;
+    return `${mainRulesPrompt}\n\n${artifactsPrompt}\n\n${searchModelPrompt}`;
   }
 };
 
