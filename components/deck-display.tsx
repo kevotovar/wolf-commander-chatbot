@@ -33,6 +33,7 @@ interface DeckDisplayProps {
     };
     stats?: DeckStats;
   };
+  wide?: boolean;
 }
 
 const categoryOrder = [
@@ -70,7 +71,7 @@ const colorNames: Record<string, string> = {
   C: 'Colorless'
 };
 
-export function DeckDisplay({ result }: DeckDisplayProps) {
+export function DeckDisplay({ result, wide }: DeckDisplayProps) {
   // Prepare data for display
   const categories: CardCategory[] = [];
   
@@ -103,9 +104,12 @@ export function DeckDisplay({ result }: DeckDisplayProps) {
     (result.stats.colorDistribution && Object.keys(result.stats.colorDistribution).length > 0) ||
     (result.stats.cardTypeDistribution && Object.keys(result.stats.cardTypeDistribution).length > 0)
   );
-  
+
+  // Apply wider card styling when wide is true
+  const cardClass = wide ? 'w-full max-w-3xl mx-auto mt-2' : 'w-full mt-2';
+
   return (
-    <Card className="w-full mt-2">
+    <Card className={cardClass}>
       <CardHeader className="pb-2">
         <h3 className="text-xl font-bold">{result.deckName || 'Commander Deck'}</h3>
         {result.commander && <div className="text-lg font-medium">Commander: {result.commander}</div>}

@@ -155,6 +155,9 @@ const PurePreviewMessage = ({
                 if (state === 'call') {
                   const { args } = toolInvocation;
 
+                  // Use a wider container for commander decklist tools
+                  const isWideTool = ['displayDecklist', 'searchDecklist'].includes(toolName);
+
                   return (
                     <div
                       key={toolCallId}
@@ -165,6 +168,7 @@ const PurePreviewMessage = ({
                           'displayDecklist',
                           'searchDecklist',
                         ].includes(toolName),
+                        'max-w-3xl mx-auto': isWideTool,
                       })}
                     >
                       {toolName === 'getWeather' ? (
@@ -188,14 +192,17 @@ const PurePreviewMessage = ({
                     ? JSON.parse(result?.[0]?.text ?? '[]')
                     : result;
 
+                  // Use a wider container for commander decklist tools
+                  const isWideTool = ['displayDecklist', 'searchDecklist'].includes(toolName);
+
                   return (
-                    <div key={toolCallId}>
+                    <div key={toolCallId} className={isWideTool ? 'max-w-3xl mx-auto' : undefined}>
                       {toolName === 'searchCards' ? (
                         <CardSearchResults result={resultData} />
                       ) : toolName === 'displayDecklist' ? (
-                        <DeckDisplay result={resultData} />
+                        <DeckDisplay result={resultData} wide />
                       ) : toolName === 'searchDecklist' ? (
-                        <DecklistSearchResults result={resultData} />
+                        <DecklistSearchResults result={resultData} wide />
                       ) : (
                         <pre>{JSON.stringify(result, null, 2)}</pre>
                       )}

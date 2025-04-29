@@ -14,17 +14,20 @@ interface DeckMetadata {
 
 interface DecklistSearchResultsProps {
   result: DeckMetadata[];
+  wide?: boolean;
 }
 
-export function DecklistSearchResults({ result }: DecklistSearchResultsProps) {
+export function DecklistSearchResults({ result, wide }: DecklistSearchResultsProps) {
   if (!Array.isArray(result) || result.length === 0) {
     return <div className="text-center py-4">No decks found.</div>;
   }
 
+  const cardClass = wide ? 'w-full max-w-3xl mx-auto' : 'w-full';
+
   return (
     <div className="space-y-4 mt-2">
       {result.map((deck, index) => (
-        <Card key={index} className="w-full">
+        <Card key={index} className={cardClass}>
           <CardHeader>
             <h3 className="text-lg font-bold">{deck.deckName}</h3>
             <p className="text-sm">Commander: {deck.commander}</p>

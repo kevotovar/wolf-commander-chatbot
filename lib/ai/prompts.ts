@@ -100,7 +100,6 @@ export const systemPrompt = ({
 }: {
   selectedChatModel: string;
 }) => {
-  console.log('selectedChatModel', selectedChatModel);
   if (selectedChatModel === 'chat-model-reasoning') {
     return `${mainRulesPrompt}\n\n${commanderPrompt}`;
   } else if (selectedChatModel === 'search-model') {

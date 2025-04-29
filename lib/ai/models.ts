@@ -12,19 +12,19 @@ export const chatModels: Array<ChatModel> = [
     name: 'Modelo de chat',
     description: 'Modelo principal para todos los chats',
   },
-  {
-    id: 'chat-model-reasoning',
-    name: 'Modelo de razonamiento',
-    description: 'Usa razonamiento avanzado',
-  },
-  {
-    id: 'search-model',
-    name: 'Modelo de búsqueda',
-    description: 'Usa búsqueda avanzada',
-  },
-  {
-    id: 'search-reasoning-model',
-    name: 'Modelo de optimización cedh',
-    description: 'Usa optimización cedh avanzada',
-  },
+  // {
+  //   id: 'chat-model-reasoning',
+  //   name: 'Modelo de razonamiento',
+  //   description: 'Usa razonamiento avanzado',
+  // },
+  // {
+  //   id: 'search-model',
+  //   name: 'Modelo de búsqueda',
+  //   description: 'Usa búsqueda avanzada',
+  // },
+  // {
+  //   id: 'search-reasoning-model',
+  //   name: 'Modelo de optimización cedh',
+  //   description: 'Usa optimización cedh avanzada',
+  // },
 ];
