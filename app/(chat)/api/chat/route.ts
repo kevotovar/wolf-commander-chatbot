@@ -21,8 +21,7 @@ import {
 import { generateTitleFromUserMessage } from '../../actions';
 import { isProductionEnvironment } from '@/lib/constants';
 import { myProvider } from '@/lib/ai/providers';
-import { searchCardsTool } from '@/lib/ai/tools/search-cards';
-import { searchCedhTool } from '@/lib/ai/tools/search-cedh';
+import { searchCardsTool, searchCedhTool, displayDecklistTool } from '@/lib/ai/tools';
 export const maxDuration = 60;
 
 export async function POST(request: Request) {
@@ -81,7 +80,7 @@ export async function POST(request: Request) {
         const result = streamText({
           providerOptions: {
             perplexity: {
-              search_domain_filter: ['moxfield.com'],
+              search_domain_filter: ['moxfield.com', 'mtgtop8.com'],
             },
           },
           model: myProvider.languageModel(selectedChatModel),
@@ -92,12 +91,13 @@ export async function POST(request: Request) {
           experimental_activeTools:
             selectedChatModel === 'chat-model-reasoning'
               ? []
-              : ['searchCards', 'searchCedh'],
+              : ['searchCards', 'searchCedh', 'displayDecklist'],
           experimental_transform: smoothStream({ chunking: 'word' }),
           experimental_generateMessageId: generateUUID,
           tools: {
             searchCards: searchCardsTool,
             searchCedh: searchCedhTool,
+            displayDecklist: displayDecklistTool,
           },
           onFinish: async ({ response, toolCalls }) => {
             console.log('toolCalls', toolCalls);
