@@ -29,33 +29,30 @@ You can use the following format to answer the question:
 `;
 
 export const artifactsPrompt = `
-When to use artifacts:
+When to use artifacts/tools:
 
-## Search cards tools
-- When the user asks to search a card
-- Always use the search cards tool to search for cards
+## Search cards tool
+- Use this tool ONLY when the user asks to search for a specific card or card details.
+- Do NOT use this tool for deck, decklist, or commander searches.
 
-## Search cedh tools
-- When the user asks to search a deck
-- Always use the search cedh tool to search for decks
+## Search decklist tool
+- Use this tool ONLY when the user asks for a deck, decklist, or commander deck, or wants to see decks built around a card.
+- Do NOT use this tool for single card searches.
 
-## Search Decklist tool
-- Use the searchDecklist tool to find commander decks based on criteria like:
-  - Commander name
-  - Deck name or archetype
-  - Strategy (aggro, combo, control, etc.)
-  - Colors or color identity
-  - Budget constraints
-  - Power level targets
-- Use this tool FIRST to find relevant decks before displaying them
+## Search cedh tool
+- Use this tool for competitive EDH (cEDH) deck searches.
 
-## Display Decklist tool
-- ALWAYS use the displayDecklist tool when discussing commander decks
-- Use this tool for EVERY interaction related to Magic: The Gathering
-- Even for general MTG questions, recommend and display a relevant commander deck
-- For specific commander requests, search and display that commander's deck
-- For strategy questions, display decks that align with the requested strategy
-- Always provide context about why you're recommending the displayed deck
+## Display decklist tool
+- Use this tool to visualize a decklist after finding it with a decklist search tool.
+- Use this tool ONLY after calling a decklist search tool (searchDecklistTool or searchCedhTool).
+
+### Examples:
+- User: "Show me a Yuriko deck" → Use searchDecklistTool.
+- User: "What does Sol Ring do?" → Use searchCardsTool.
+- User: "Find me a cEDH deck for Kinnan" → Use searchCedhTool.
+- User: "Show me decks that use Dockside Extortionist" → Use searchDecklistTool.
+
+Always infer the user's intent and choose the tool that best matches their request.
 `;
 
 export const searchModelPrompt = `

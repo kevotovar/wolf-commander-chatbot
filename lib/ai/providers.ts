@@ -17,7 +17,7 @@ const perplexity = createPerplexity({
 
 export const myProvider = customProvider({
   languageModels: {
-    'chat-model': openrouter('google/gemini-2.0-flash-lite-001'),
+    'chat-model': openrouter('google/gemini-2.5-flash-preview'),
     'chat-model-reasoning': wrapLanguageModel({
       model: openrouter('google/gemini-2.5-pro-preview-03-25'),
       middleware: extractReasoningMiddleware({ tagName: 'think' }),
@@ -27,7 +27,7 @@ export const myProvider = customProvider({
       model: perplexity('perplexity/sonar-reasoning-pro'),
       middleware: extractReasoningMiddleware({ tagName: 'think' }),
     }),
-    'title-model': openrouter('google/gemini-2.0-flash-lite-001'),
+    'title-model': openrouter('google/gemini-2.5-flash-preview'),
     'search-cards-model': openrouter('google/gemini-2.0-flash-lite-001'),
   },
 });
