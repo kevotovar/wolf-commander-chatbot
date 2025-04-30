@@ -21,7 +21,12 @@ import {
 import { generateTitleFromUserMessage } from '../../actions';
 import { isProductionEnvironment } from '@/lib/constants';
 import { myProvider } from '@/lib/ai/providers';
-import { searchCardsTool, searchCedhTool, displayDecklistTool, searchDecklistTool } from '@/lib/ai/tools';
+import {
+  searchCardsTool,
+  searchCedhTool,
+  displayDecklistTool,
+  searchDecklistTool,
+} from '@/lib/ai/tools';
 export const maxDuration = 60;
 
 export async function POST(request: Request) {
@@ -92,7 +97,12 @@ export async function POST(request: Request) {
           experimental_activeTools:
             selectedChatModel === 'chat-model-reasoning'
               ? []
-              : ['searchCards', 'searchCedh', 'displayDecklist', 'searchDecklist'],
+              : [
+                  'searchCards',
+                  'searchCedh',
+                  'displayDecklist',
+                  'searchDecklist',
+                ],
           experimental_transform: smoothStream({ chunking: 'word' }),
           experimental_generateMessageId: generateUUID,
           tools: {
