@@ -56,7 +56,7 @@ interface DeckData {
 
 // Use literal type "text" for the type property to match ToolResultContent requirements
 interface FormattedContentItem {
-  type: "text";
+  type: 'text';
   text: string;
 }
 
@@ -69,38 +69,42 @@ export const displayDecklistSchema = z.object({
 });
 
 export const displayDecklistTool = tool({
-  description: 'Display a decklist in a visually appealing format with card categories and statistics',
+  description:
+    'Display a decklist in a visually appealing format with card categories and statistics',
   parameters: displayDecklistSchema,
   execute: async ({ deckName, deckUrl, commander, cards, rawDeckData }) => {
     console.log('displayDecklistTool called', { deckName, deckUrl, commander });
-    
+
     // If raw deck data is provided, parse it
     let deckData: Partial<DeckData> = {};
     let parsedCards = cards || [];
-    
+
     if (rawDeckData) {
       try {
         // Attempt to parse the raw deck data if it's in JSON format
         deckData = JSON.parse(rawDeckData) as Partial<DeckData>;
-        
+
         // Extract cards if available in the parsed data
-        if (deckData.categories && Object.values(deckData.categories).some(Array.isArray)) {
+        if (
+          deckData.categories &&
+          Object.values(deckData.categories).some((item) => Array.isArray(item))
+        ) {
           // Flatten all category arrays into a single array if categories exist
           parsedCards = Object.values(deckData.categories)
-            .filter(Array.isArray)
-            .flatMap(cardArray => cardArray);
+            .filter((item) => Array.isArray(item))
+            .flat();
         }
       } catch (error) {
         console.error('Error parsing raw deck data:', error);
       }
     }
-    
+
     // Use AI to organize and categorize the deck if we have cards
     let organizedDeck: DeckData = { deckName: deckName || 'Commander Deck' };
-    
+
     if (parsedCards.length > 0 || deckUrl) {
       const model = myProvider.languageModel('search-cards-model');
-      
+
       const prompt = `
       Analyze this Commander deck${deckName ? ` named "${deckName}"` : ''}${commander ? ` with commander "${commander}"` : ''}${deckUrl ? ` from URL: ${deckUrl}` : ''}.
       ${parsedCards.length > 0 ? `Cards in deck: ${parsedCards.join(', ')}` : ''}
@@ -147,15 +151,27 @@ export const displayDecklistTool = tool({
       
       Return only the JSON object, no other text.
       `;
-      
+
       try {
         const { text } = await generateText({
           model,
           prompt,
         });
-        
+
         try {
-          organizedDeck = JSON.parse(text) as DeckData;
+          // Check if the response is inside a markdown code block
+          let jsonText = text;
+
+          // Remove markdown code block syntax if present
+          const markdownJsonRegex = /```(?:json)?\s*([\s\S]+?)```/;
+          const markdownMatch = text.match(markdownJsonRegex);
+
+          if (markdownMatch?.[1]) {
+            jsonText = markdownMatch[1].trim();
+            console.log('Extracted JSON from markdown code block');
+          }
+
+          organizedDeck = JSON.parse(jsonText) as DeckData;
         } catch (error) {
           console.error('Error parsing AI response:', error);
           // If parsing fails, return the raw text
@@ -175,7 +191,7 @@ export const displayDecklistTool = tool({
       // If we only have a deck name or commander but no cards, do a search
       const model = myProvider.languageModel('search-model');
       const searchQuery = deckName || commander;
-      
+
       const prompt = `
       Find information about the Commander deck ${searchQuery}.
       Return a JSON object with deck information in the following format:
@@ -189,18 +205,23 @@ export const displayDecklistTool = tool({
       
       Return only the JSON object, no other text.
       `;
-      
+
       try {
         const { text } = await generateText({
           model,
           prompt,
           providerOptions: {
             perplexity: {
-              search_domain_filter: ['www.mtgtop8.com', 'edhtop16.com', 'moxfield.com', 'archidekt.com'],
+              search_domain_filter: [
+                'www.mtgtop8.com',
+                'edhtop16.com',
+                'moxfield.com',
+                'archidekt.com',
+              ],
             },
           },
         });
-        
+
         try {
           organizedDeck = JSON.parse(text) as DeckData;
         } catch (error) {
@@ -223,22 +244,23 @@ export const displayDecklistTool = tool({
         text: 'Please provide at least a deck name, commander name, deck URL, or list of cards.',
       };
     }
-    
+
     return organizedDeck;
   },
   experimental_toToolResultContent: (response) => {
     // If response is already a string, parse it
-    const deckData: DeckData = typeof response === 'string' ? JSON.parse(response) : response;
-    
+    const deckData: DeckData =
+      typeof response === 'string' ? JSON.parse(response) : response;
+
     // Format the deck data into a visually appealing display
     const formattedContent: FormattedContentItem[] = [];
-    
+
     // Add deck header
     formattedContent.push({
       type: 'text',
       text: `# ${deckData.deckName || 'Commander Deck'}\n\n`,
     });
-    
+
     // Add commander and strategy
     if (deckData.commander) {
       formattedContent.push({
@@ -246,36 +268,36 @@ export const displayDecklistTool = tool({
         text: `## Commander: ${deckData.commander}\n\n`,
       });
     }
-    
+
     if (deckData.strategy) {
       formattedContent.push({
         type: 'text',
         text: `### Strategy\n${deckData.strategy}\n\n`,
       });
     }
-    
+
     if (deckData.powerLevel) {
       formattedContent.push({
         type: 'text',
         text: `**Power Level:** ${deckData.powerLevel}/10\n\n`,
       });
     }
-    
+
     // Add key cards if available
     if (deckData.keyCards && Array.isArray(deckData.keyCards)) {
       formattedContent.push({
         type: 'text',
-        text: `### Key Cards\n${deckData.keyCards.map(card => `- ${card}`).join('\n')}\n\n`,
+        text: `### Key Cards\n${deckData.keyCards.map((card) => `- ${card}`).join('\n')}\n\n`,
       });
     }
-    
+
     // Add categories if available
     if (deckData.categories) {
       formattedContent.push({
         type: 'text',
         text: `## Card Categories\n\n`,
       });
-      
+
       const categoryNames: Record<string, string> = {
         commander: 'Commander',
         ramp: 'Ramp',
@@ -286,33 +308,33 @@ export const displayDecklistTool = tool({
         winConditions: 'Win Conditions',
         synergy: 'Synergy Pieces',
         lands: 'Lands',
-        other: 'Other'
+        other: 'Other',
       };
-      
+
       for (const [category, cards] of Object.entries(deckData.categories)) {
         if (Array.isArray(cards) && cards.length > 0) {
           formattedContent.push({
             type: 'text',
-            text: `### ${categoryNames[category] || category} (${cards.length})\n${cards.map(card => `- ${card}`).join('\n')}\n\n`,
+            text: `### ${categoryNames[category] || category} (${cards.length})\n${cards.map((card) => `- ${card}`).join('\n')}\n\n`,
           });
         }
       }
     }
-    
+
     // Add stats if available
     if (deckData.stats) {
       formattedContent.push({
         type: 'text',
         text: `## Deck Statistics\n\n`,
       });
-      
+
       if (deckData.stats.avgCmc) {
         formattedContent.push({
           type: 'text',
           text: `**Average CMC:** ${deckData.stats.avgCmc}\n\n`,
         });
       }
-      
+
       if (deckData.stats.colorDistribution) {
         const colorNames: Record<string, string> = {
           W: 'White',
@@ -320,43 +342,46 @@ export const displayDecklistTool = tool({
           B: 'Black',
           R: 'Red',
           G: 'Green',
-          C: 'Colorless'
+          C: 'Colorless',
         };
-        
+
         formattedContent.push({
           type: 'text',
           text: `### Color Distribution\n`,
         });
-        
+
         const colorEntries = Object.entries(deckData.stats.colorDistribution);
         if (colorEntries.length > 0) {
           formattedContent.push({
             type: 'text',
-            text: colorEntries.map(([color, count]) => 
-              `- ${colorNames[color] || color}: ${count} cards`
-            ).join('\n') + '\n\n',
+            text: `${colorEntries
+              .map(
+                ([color, count]) =>
+                  `- ${colorNames[color] || color}: ${count} cards`,
+              )
+              .join('\n')}\n\n`,
           });
         }
       }
-      
+
       if (deckData.stats.cardTypeDistribution) {
         formattedContent.push({
           type: 'text',
           text: `### Card Type Distribution\n`,
         });
-        
+
         const typeEntries = Object.entries(deckData.stats.cardTypeDistribution);
         if (typeEntries.length > 0) {
           formattedContent.push({
             type: 'text',
-            text: typeEntries.map(([type, count]) => 
-              `- ${type}: ${count} cards`
-            ).join('\n') + '\n\n',
+            text: `${typeEntries
+              .map(([type, count]) => `- ${type}: ${count} cards`)
+              .join('\n')}\n\n`,
           });
         }
       }
     }
-    
+
     return formattedContent;
   },
 });
